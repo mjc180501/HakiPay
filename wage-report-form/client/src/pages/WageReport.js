@@ -141,19 +141,20 @@ function WageReport() {
 
   return (
     <div className="container">
-        <div className="navbar">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <div className="dropdown">
-            <button className="dropbtn">Services ▾</button>
-            <div className="dropdown-content">
-              <Link to="/wage-report">Share your wages now</Link>
-              <Link to="/contact">Contact Us</Link>
-            </div>
+      <div className="navbar">
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <div className="dropdown">
+          <button className="dropbtn">Services ▾</button>
+          <div className="dropdown-content">
+            <Link to="/wage-report">Share your wages now</Link>
+            <Link to="/contact">Contact Us</Link>
           </div>
-          <Link to="/defining-the-problem">Defining the Problem</Link>
-          <Link to="/solutions">Solution</Link>
         </div>
+        <Link to="/defining-the-problem">Defining the Problem</Link>
+        <Link to="/solutions">Solution</Link>
+        <Link to="/map">Wage Map</Link>
+      </div>
 
       <h1>{t.title}</h1>
       <select value={lang} onChange={(e) => setLang(e.target.value)}>

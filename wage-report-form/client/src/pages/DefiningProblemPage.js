@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./DefiningProblemPage.css";
+import { Link } from "react-router-dom";
 
 function DefiningProblemPage() {
   useEffect(() => {
@@ -17,18 +18,19 @@ function DefiningProblemPage() {
   return (
     <div>
       <div className="navbar">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
         <div className="dropdown">
           <button className="dropbtn">Services ▾</button>
           <div className="dropdown-content">
-            <a href="/documents">Share your wages now</a>
-            <a href="/contact">Contact Us</a>
+            <Link to="/wage-report">Share your wages now</Link>
+            <Link to="/contact">Contact Us</Link>
           </div>
         </div>
-        <a href="/definingtheproblem">Defining the Problem</a>
-        <a href="/solutions">Solution</a>
-      </div>
+        <Link to="/defining-the-problem">Defining the Problem</Link>
+        <Link to="/solutions">Solution</Link>
+        <Link to="/map">Wage Map</Link>
+      </div>z
 
       <div className="banner">
         <img

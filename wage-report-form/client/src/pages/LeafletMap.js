@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import L from "leaflet";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
-import csvFile from "./employers.csv"; 
+import csvFile from "./employers.csv";
+import { Link } from "react-router-dom";
 
 function LeafletMap() {
   useEffect(() => {
@@ -133,7 +134,22 @@ function LeafletMap() {
   }, []);
 
   return (
-    <div>
+    <div className="container">
+      {/* Navbar */}
+      <div className="navbar">
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <div className="dropdown">
+          <button className="dropbtn">Services ▾</button>
+          <div className="dropdown-content">
+            <Link to="/wage-report">Share your wages now</Link>
+            <Link to="/contact">Contact Us</Link>
+          </div>
+        </div>
+        <Link to="/defining-the-problem">Defining the Problem</Link>
+        <Link to="/solutions">Solution</Link>
+        <Link to="/map">Wage Map</Link>
+      </div>
       <div className="controls" style={{ margin: "10px", fontFamily: "sans-serif" }}>
         <div>
           <label>
