@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Submissions</h2>
+<a href="{{ url_for('export_csv') }}"><button>Export as CSV</button></a>
+
+{% if submissions %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>State</th>
+        <th>Industry</th>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Exp</th>
+        <th>Wage</th>
+        <th>Location</th>
+    </tr>
+    {% for s in submissions %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.state_id }}</td>
+        <td>{{ s.industry }}</td>
+        <td>{{ s.job_title }}</td>
+        <td>{{ s.company }}</td>
+        <td>{{ s.experience_years }}</td>
+        <td>{{ s.wage }}</td>
+        <td>{{ s.location }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No submissions yet. <a href="{{ url_for('submit') }}">Submit your wage</a></p>
+{% endif %}
+{% endblock %}
+
+

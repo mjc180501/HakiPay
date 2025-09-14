@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Welcome to FairPay Tanzania</h2>
+<p>Track wages, compare industry averages, and benchmark your earnings.</p>
+
+<div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:20px;">
+    <a href="{{ url_for('submit') }}"><button>Submit Wage</button></a>
+    <a href="{{ url_for('submissions_page') }}"><button>My Submissions</button></a>
+    <a href="{{ url_for('average_industry') }}"><button>Average by Industry</button></a>
+    <a href="{{ url_for('average_location') }}"><button>Average by Location</button></a>
+    <a href="{{ url_for('exit_page') }}"><button>Exit</button></a>
+</div>
+{% endblock %}
+
