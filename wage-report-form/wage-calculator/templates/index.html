@@ -1,14 +1,32 @@
 {% extends "base.html" %}
-{% block content %}
-<h2>Welcome to FairPay Tanzania</h2>
-<p>Track wages, compare industry averages, and benchmark your earnings.</p>
 
-<div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:20px;">
-    <a href="{{ url_for('submit') }}"><button>Submit Wage</button></a>
-    <a href="{{ url_for('submissions_page') }}"><button>My Submissions</button></a>
-    <a href="{{ url_for('average_industry') }}"><button>Average by Industry</button></a>
-    <a href="{{ url_for('average_location') }}"><button>Average by Location</button></a>
-    <a href="{{ url_for('exit_page') }}"><button>Exit</button></a>
-</div>
+{% block content %}
+<form class="calculator-form" method="POST">
+    <input type="number" step="0.01" name="wage" placeholder="Enter your wage" required>
+    <input type="text" name="location" placeholder="Enter your city" required>
+    <select name="sector" required>
+        <option value="">Select your sector</option>
+        <option value="hospitality">Hospitality</option>
+        <option value="tech">Tech</option>
+        <option value="construction">Construction</option>
+        <option value="other">Other</option>
+    </select>
+    <button type="submit">Calculate</button>
+</form>
+
+{% if result %}
+    {% if result.error %}
+        <p class="error">{{ result.error }}</p>
+    {% else %}
+        <div class="result">
+            <p>Your wage: {{ result.user_wage }} TZS</p>
+            <p>Living wage in {{ result.location }}: {{ result.living_wage }} TZS</p>
+            <p>Average wage in {{ result.sector }} sector: {{ result.sector_avg }} TZS</p>
+            <p>You earn {{ result.diff_living | round(2) }}% compared to the living wage.</p>
+            <p>You earn {{ result.diff_sector | round(2) }}% compared to the sector average.</p>
+        </div>
+    {% endif %}
+{% endif %}
 {% endblock %}
+
 
