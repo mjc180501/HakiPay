@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FairPay Tanzania</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+    <h1>FairPay Tanzania</h1>
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('submit') }}">Submit Wage</a>
+        <a href="{{ url_for('submissions_page') }}">My Submissions</a>
+        <a href="{{ url_for('average_industry') }}">Industry Avg</a>
+        <a href="{{ url_for('average_location') }}">Location Avg</a>
+        <a href="{{ url_for('exit_page') }}">Exit</a>
+        <button onclick="toggleDark()">Dark Mode</button>
+    </nav>
+</header>
+<main>
+    {% block content %}{% endblock %}
+</main>
+<footer>&copy; 2025 FairPay Tanzania</footer>
+
+<script>
+function toggleDark() {
+    document.body.classList.toggle('dark');
+}
+</script>
+</body>
+</html>
+
