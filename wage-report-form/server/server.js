@@ -1,35 +1,29 @@
 import express from "express";
-import multer from "multer";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use("/pages", express.static(path.join(__dirname, "..pages")));
 
-// Simple in-memory storage for demo
+// app.use(cors({
+//   origin: "https://redesigned-space-adventure-q7qrrxw9rw6gfxxx7-3000.app.github.dev",
+//   methods: ["GET", "POST", "DELETE"],
+//   credentials: true,
+// }));
+
+app.use(cors());
+
+app.use(express.json());
+
+app.use("/pages", express.static(path.join(__dirname, "..", "pages")));
+
 let wages = [];
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage });
-
-// Make uploads folder publicly accessible
-app.use("/uploads", express.static("uploads"));
-
-// POST wage submission with optional image
-app.post("/api/wages", upload.single("image"), (req, res) => {
+app.post("/api/wages", (req, res) => {
   try {
     const {
       role,
@@ -45,8 +39,9 @@ app.post("/api/wages", upload.single("image"), (req, res) => {
       hours,
     } = req.body;
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-    const effectiveHourly = hours ? (Number(wage) + Number(bonuses || 0)) / Number(hours) : null;
+    const effectiveHourly = hours
+      ? (Number(wage) + Number(bonuses || 0)) / Number(hours)
+      : null;
 
     const newWage = {
       role,
@@ -61,18 +56,17 @@ app.post("/api/wages", upload.single("image"), (req, res) => {
       bonuses: bonuses ? Number(bonuses) : 0,
       hours: hours ? Number(hours) : null,
       effectiveHourly,
-      image: imagePath,
       createdAt: new Date(),
     };
+
     wages.push(newWage);
-    res.status(200).json(newWage);
+    res.status(200).json({ wage: newWage });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error submitting wage" });
   }
 });
 
-// GET wages with optional filters
 app.get("/api/wages", (req, res) => {
   const { role, region, industry, minExperience, maxExperience } = req.query;
   let result = [...wages];
@@ -85,7 +79,7 @@ app.get("/api/wages", (req, res) => {
 
   res.json(result);
 });
-// Delete a wage by userId
+
 app.delete("/api/wages/:userId", (req, res) => {
   const { userId } = req.params;
   const index = wages.findIndex((w) => w.userId === userId);
@@ -99,5 +93,11 @@ app.delete("/api/wages/:userId", (req, res) => {
 });
 
 
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});

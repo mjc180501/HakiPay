@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+    html, body {
+        padding: none;
+        background-color: #c8d8e4;
+        font-family: 'Georgia', serif;
+        border: none;
+        margin: 0;
+    }
+    h1 {
+            font-family: 'Georgia', serif;
+            color: #2b6777;
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 0;
+            padding: 10px;
+    }
+    h2 {
+            font-family: 'Georgia', serif;
+            color: #2b6777;
+            text-align: left;
+            font-size: 40px;
+            padding: 10px;
+            
+    }
+    h3 {
+            font-family: 'Georgia', serif;
+            color: #2b6777;
+            text-align: left;
+            font-size: 30px;
+            padding: 10px;
+            
+    }
+    p {
+            font-family: 'Georgia', serif;
+            color: #2b6777;
+            text-align: justify;
+            font-size: 20px;
+            padding: 10px;
+
+    }
+    span {
+        font-family: 'Georgia', serif;
+        color: #2b6777;
+        text-align: justify;
+        font-size: 20px;
+        padding: 10px;
+    }
+  </style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Defining the Problem/HakiPay</title>
+<div class="navbar">
+    <a href="file:///Users/mariammaingu/Desktop/hackmit.html">Home</a>
+    <a href="about.html">About</a>
+    <div class="dropdown">
+      <button class="dropbtn">Services ▾</button>
+      <div class="dropdown-content">
+        <a href="documents.html">Share your wages now</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </div>
+    <a href="definingtheproblem.html">Defining the Problem</a>
+    <a href="solutions.html">Solution</a>
+  </div>
+  <style>
+    .banner {
+        margin-top: 0;
+        width: 100%;
+        height: 600px;
+        overflow: hidden;
+        position: relative;
+    }
+    .banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      transition: opacity 1s ease-in-out;
+      opacity: 0;
+    }
+
+    .banner img.active {
+        display: block;
+        opacity: 1;
+    }
+    .image-with-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+    .image-with-text.active {
+        opacity: 1;
+        z-index: 1;
+    }
+    .image-with-text img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+     .overlay-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.4); /* Faded black overlay */
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center;
+      pointer-events: none;
+    }
+  </style>
+<div class="banner">
+    <img src="https://www.brookings.edu/wp-content/uploads/2018/12/Global_Factory_Workers_Rwanda.jpg" alt="Image 1" class="active">
+    <img src="https://c.files.bbci.co.uk/D581/production/_111775645_swahili1.jpg" alt="Image 2">
+    <img src="https://live.staticflickr.com/8122/8671574915_eeeb3395b1_z.jpg" alt="Image 3">
+  </div>
+  <script>
+    const images = document.querySelectorAll('.banner img');
+    let current = 0;
+
+    function showNextImage() {
+      images[current].classList.remove('active');
+      current = (current + 1) % images.length;
+      images[current].classList.add('active');
+    }
+
+    setInterval(showNextImage, 3000); // Change every 3 seconds
+  </script>
+
+<style>
+    /* Basic styling */
+
+    /* Navbar container */
+    .navbar {
+      background-color: #2b6777;
+      overflow: hidden;
+    }
+
+    /* Navbar links */
+    .navbar a {
+      float: left;
+      display: block;
+      color:#f2f2f2;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+
+    /* Dropdown container */
+    .dropdown {
+      float: left;
+      overflow: hidden;
+    }
+
+    /* Dropdown button */
+    .dropdown .dropbtn {
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      color:#f2f2f2;
+      padding: 14px 20px;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+    }
+
+    /* Dropdown content (hidden by default) */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+      float: none;
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    /* Show the dropdown on hover */
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* Change color on hover */
+    .navbar a:hover, .dropdown:hover .dropbtn {
+      background-color: #52ab98;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+  <body>
+  <h1>Defining the Problem</h1>
+  <p>
+   In many sectors across East Africa, conversations around pay remain taboo, and wage data is kept behind closed doors. This lack of transparency leaves countless workers—especially women, youth, and those in informal or low-wage jobs—vulnerable to unfair compensation, discrimination, and exploitation. Without access to reliable information on industry standards or what peers in similar roles earn, workers are left in the dark about their own value. This systemic opacity not only reinforces income inequality but also prevents meaningful progress toward economic justice. HakiPay seeks to break this silence and bridge the information gap by making wage data accessible, anonymous, and community-driven.
+  </p>
+  <style>
+   button {
+    padding: 10px 20px;
+    background-color: #2b6777;
+    color: #f2f2f2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+   } 
+   button:hover {
+
+    background-color: #0056b3;
+   }
+   </style>
+<style>
+  table {
+    border-collapse: collapse;
+  }
+
+  td, th {
+    width: 33%;   /* Set cell width */
+    height: 300;  /* Set cell height */
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-color: #c8d8e4;
+  }
+
+  img {
+    width: 100%;   /* Set image width */
+    height: 280px;  /* Set image height */
+    object-fit: cover; /* Keeps aspect ratio inside the box */
+  }
+  .image-hover {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+.image-hover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.overlay-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none; /* So the link still works */
+}
+.image-hover:hover .overlay-text {
+  opacity: 1;
+}
+
+</style>
+<center><table border="0">
+  <tr>
+    <td>
+        <a href="definingtheproblem.html">
+        <div class="image-hover">
+            <img src="https://www.robertharding.com/watermark.php?type=preview&im=RM/RH/HORIZONTAL/357-1983" alt="Image 4">
+            <div class="overlay-text">Defining the Problem</div>
+        </div>
+        </a>
+    </td>
+    <td>
+        <a href="solutions.html">
+        <div class="image-hover">
+            <img src="https://www.globaltimes.cn/Portals/0/attachment/2022/2022-05-11/59b075b4-7964-4518-92dd-f53a445c70ac.jpeg" alt="Image 5">
+            <div class="overlay-text">Solution</div>
+        </div>
+        </a>
+    </td>
+    <td>
+        <a href="contact.html">
+        <div class="image-hover">
+            <img src="https://untf.unwomen.org/sites/default/files/Field%20Office%20UNTF/Images/tanzania%20small%20Betty%20Mtewele%20-%20Vendor%20Mchikichini%20market.webp?la=en" alt="Image 6">
+             <div class="overlay-text">Contact Us</div>
+        </a>
+    </td>
+  </tr>
+</table></center>
+<p></p>
+<p></p>
+<center><a href="documents.html"><button>Share your wages now</button></a></center>
+<p></p>
+<p></p>
+</body>
+</html>

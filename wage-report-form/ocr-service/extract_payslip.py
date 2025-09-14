@@ -1,6 +1,7 @@
 import pytesseract
 import re
 from PIL import Image
+import sys
 
 def extract_payslip_data(image_path):
     text = pytesseract.image_to_string(Image.open(image_path))
@@ -27,8 +28,8 @@ def extract_payslip_data(image_path):
     return extracted
 
 if __name__ == "__main__":
-    image_path = "sample_payslip.png"
-    data = extract_payslip_data(image_path)
+    #image_path = "sample_payslip.png"
+    data = extract_payslip_data(sys.argv[1])
     print("\n=== EXTRACTED DATA ===")
     for key, value in data.items():
         print(f"{key}: {value}")
