@@ -1,96 +1,85 @@
 import express from "express";
-import dotenv from "dotenv";
+import multer from "multer";
 import cors from "cors";
-import crypto from "crypto";
-
-dotenv.config();
+import path from "path";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; // 32 chars
+// Simple in-memory storage for demo
+let wages = [];
 
-if (!ENCRYPTION_KEY || ENCRYPTION_KEY.length !== 32) {
-  throw new Error(`ENCRYPTION_KEY must be 32 characters long. Current length: ${ENCRYPTION_KEY.length}`);
-}
-const IV_LENGTH = 16;
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
 
-// In-memory array to store wages
-const wages = [];
+// Make uploads folder publicly accessible
+app.use("/uploads", express.static("uploads"));
 
-// Encryption / Decryption
-function encrypt(text) {
-  const iv = crypto.randomBytes(IV_LENGTH);
-  const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(ENCRYPTION_KEY), iv);
-  let encrypted = cipher.update(text);
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-  return iv.toString("hex") + ":" + encrypted.toString("hex");
-}
-
-function decrypt(text) {
-  const parts = text.split(":");
-  const iv = Buffer.from(parts.shift(), "hex");
-  const encryptedText = Buffer.from(parts.join(":"), "hex");
-  const decipher = crypto.createDecipheriv("aes-256-cbc", Buffer.from(ENCRYPTION_KEY), iv);
-  let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  return decrypted.toString();
-}
-
-// POST route: submit wage
-app.post("/api/wages", (req, res) => {
+// POST wage submission with optional image
+app.post("/api/wages", upload.single("image"), (req, res) => {
   try {
-    const { role, region, industry, experience, wage, userId, companyName } = req.body;
+    const {
+      role,
+      region,
+      industry,
+      experience,
+      companyName,
+      wage,
+      currency,
+      userId,
+      benefits,
+      bonuses,
+      hours,
+    } = req.body;
+
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    const effectiveHourly = hours ? (Number(wage) + Number(bonuses || 0)) / Number(hours) : null;
 
     const newWage = {
       role,
       region,
       industry,
-      experience,
-      wage,
-      userIdEncrypted: encrypt(userId),
-      companyNameEncrypted: encrypt(companyName),
-      createdAt: new Date()
+      experience: Number(experience),
+      companyName,
+      wage: Number(wage),
+      currency,
+      userId,
+      benefits: benefits || "",
+      bonuses: bonuses ? Number(bonuses) : 0,
+      hours: hours ? Number(hours) : null,
+      effectiveHourly,
+      image: imagePath,
+      createdAt: new Date(),
     };
-
     wages.push(newWage);
-    res.json({ success: true });
+    res.status(200).json(newWage);
   } catch (err) {
-    console.error("Error submitting wage:", err);
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Error submitting wage" });
   }
 });
 
-// GET route: fetch wages (anonymize names if <20 reports)
+// GET wages with optional filters
 app.get("/api/wages", (req, res) => {
-  try {
-    const { role, region } = req.query;
-    const MIN_REPORTS = 20;
+  const { role, region, industry, minExperience, maxExperience } = req.query;
+  let result = [...wages];
 
-    const filtered = wages.filter(w => w.role === role && w.region === region);
-    const hideNames = filtered.length < MIN_REPORTS;
+  if (role) result = result.filter((w) => w.role === role);
+  if (region) result = result.filter((w) => w.region === region);
+  if (industry) result = result.filter((w) => w.industry === industry);
+  if (minExperience) result = result.filter((w) => w.experience >= Number(minExperience));
+  if (maxExperience) result = result.filter((w) => w.experience <= Number(maxExperience));
 
-    const result = filtered.map(w => ({
-      role: w.role,
-      region: w.region,
-      industry: w.industry,
-      experience: w.experience,
-      wage: w.wage,
-      userId: hideNames ? null : decrypt(w.userIdEncrypted),
-      companyName: hideNames ? "Anonymous" : decrypt(w.companyNameEncrypted),
-      createdAt: w.createdAt
-    }));
-
-    res.json(result);
-  } catch (err) {
-    console.error("Error fetching wages:", err);
-    res.status(500).json({ error: err.message });
-  }
+  res.json(result);
 });
 
+const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
