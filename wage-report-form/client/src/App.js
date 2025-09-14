@@ -25,6 +25,19 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/defining-the-problem" element={<DefiningProblemPage />} />
           <Route path="/solutions" element={<SolutionsPage />} />
+          <Route 
+  path="/calculator" 
+  element={
+    <div style={{ width: "100%", height: "100vh" }}>
+      <iframe 
+        src="http://localhost:5000" 
+        style={{ width: "100%", height: "100%", border: "none" }}
+        title="Financial Calculator"
+      />
+    </div>
+  } 
+/>
+
         </Routes>
 
     </Router>
