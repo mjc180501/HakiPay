@@ -2,10 +2,16 @@ import express from "express";
 import multer from "multer";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
+const dbPath = path.join(process.cwd(), "db");
+const __dirname = path.dirname(__filename);
+
+const cors = require("cors");
 app.use(cors());
 app.use(express.json());
+app.use("/pages", express.static(path.join(__dirname, "..pages")));
 
 // Simple in-memory storage for demo
 let wages = [];
