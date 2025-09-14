@@ -4,51 +4,85 @@ import "./App.css";
 
 const LANGUAGES = {
   en: {
-    title: "Anonymous Wage Reporting",
-    notice: "All submissions are anonymous. Names will be revealed after 20 reports.",
-    submit: "Submit Wage",
-    success: "Wage submitted successfully!",
-    error: "Error submitting wage.",
-    belowBenchmark: "Your wage is below recommended minimum!",
+    title: "Anonymous Wage Report",
+    submit: "Submit",
     fetch: "Fetch Wages",
     export: "Export CSV",
-    dbLink: "View related company data",
     placeholders: {
       role: "Select Role",
       region: "Select Region",
-      industry: "Select Industry",
-      experience: "Experience (years)",
+      industry: "Industry",
+      experience: "Years of Experience",
       company: "Company Name",
-      wage: "Wage",
-      bonuses: "Bonuses (optional)",
-      benefits: "Benefits (optional)",
-      hours: "Work Hours (optional)",
-      image: "Upload Payslip/Contract (optional)",
+      wage: "Base Wage",
+      bonuses: "Bonuses",
+      benefits: "Benefits",
+      hours: "Hours Worked"
     },
+    belowBenchmark: "Warning: Wage below recommended minimum",
+    error: "Error submitting wage",
+    dbLink: "View Company Database"
   },
-  sw: {
-    title: "Ripoti za Mishahara Bila Kuelezwa",
-    notice: "Utoaji wote wa taarifa ni wa siri. Majina yatafunuliwa baada ya ripoti 20.",
-    submit: "Tuma Mshahara",
-    success: "Mshahara umetumwa kwa mafanikio!",
-    error: "Hitilafu katika kutuma mshahara.",
-    belowBenchmark: "Mshahara wako uko chini ya kiwango kilichopendekezwa!",
+  sw: { // Swahili
+    title: "Ripoti ya Mishahara Bila Kutambulika",
+    submit: "Tuma",
     fetch: "Pata Mishahara",
-    export: "Pakia CSV",
-    dbLink: "Angalia data ya kampuni",
+    export: "Hamisha CSV",
     placeholders: {
       role: "Chagua Kazi",
-      region: "Chagua Eneo",
-      industry: "Chagua Sekta",
-      experience: "Uzoefu (miaka)",
+      region: "Chagua Mkoa",
+      industry: "Sekta",
+      experience: "Miaka ya Uzoefu",
       company: "Jina la Kampuni",
-      wage: "Mshahara",
-      bonuses: "Ziada (hiari)",
-      benefits: "Manufaa (hiari)",
-      hours: "Masaa ya Kazi (hiari)",
-      image: "Pakia Payslip/Mkataba (hiari)",
+      wage: "Mshahara Msingi",
+      bonuses: "Bonasi",
+      benefits: "Manufaa",
+      hours: "Masaa ya Kazi"
     },
+    belowBenchmark: "Onyo: Mshahara chini ya kiwango kilichopendekezwa",
+    error: "Hitilafu katika kutuma mshahara",
+    dbLink: "Tazama Hifadhidata ya Kampuni"
   },
+  fr: { // French
+    title: "Rapport de Salaire Anonyme",
+    submit: "Soumettre",
+    fetch: "Récupérer les Salaires",
+    export: "Exporter CSV",
+    placeholders: {
+      role: "Sélectionner le Poste",
+      region: "Sélectionner la Région",
+      industry: "Industrie",
+      experience: "Années d'Expérience",
+      company: "Nom de l'Entreprise",
+      wage: "Salaire de Base",
+      bonuses: "Bonus",
+      benefits: "Avantages",
+      hours: "Heures Travaillées"
+    },
+    belowBenchmark: "Attention : Salaire en dessous du minimum recommandé",
+    error: "Erreur lors de la soumission du salaire",
+    dbLink: "Voir la Base de Données des Entreprises"
+  },
+  es: { // Spanish
+    title: "Informe Anónimo de Salarios",
+    submit: "Enviar",
+    fetch: "Obtener Salarios",
+    export: "Exportar CSV",
+    placeholders: {
+      role: "Seleccionar Rol",
+      region: "Seleccionar Región",
+      industry: "Industria",
+      experience: "Años de Experiencia",
+      company: "Nombre de la Empresa",
+      wage: "Salario Base",
+      bonuses: "Bonificaciones",
+      benefits: "Beneficios",
+      hours: "Horas Trabajadas"
+    },
+    belowBenchmark: "Advertencia: Salario por debajo del mínimo recomendado",
+    error: "Error al enviar el salario",
+    dbLink: "Ver Base de Datos de Empresas"
+  }
 };
 
 function App() {
@@ -72,8 +106,10 @@ function App() {
   const [sortField, setSortField] = useState("wage");
   const [sortDirection, setSortDirection] = useState("desc");
 
-  const predefinedRoles = ["Cleaning", "Teaching", "Engineering", "Other"];
-  const predefinedRegions = ["Zanzibar North", "Dar es Salaam", "Arusha", "Other"];
+  const predefinedRoles = ["Cleaning", "Teaching", "Engineering", "Healthcare", 
+  "Hospitality", "IT / Tech", "Construction", "Retail", "Other"];
+  const predefinedRegions = ["Zanzibar North", "Dar es Salaam", "Arusha", "Mwanza", 
+  "Dodoma", "Mbeya", "Kilimanjaro", "Other"];
   const predefinedIndustries = ["Hospitality", "Tech", "Construction", "Other"];
   const currencies = ["USD", "TZS", "EUR"];
 
@@ -157,6 +193,20 @@ function App() {
     link.click();
     document.body.removeChild(link);
   };
+  const handleDelete = async (userId) => {
+  if (!window.confirm("Are you sure you want to delete this submission?")) return;
+
+  try {
+    await axios.delete(`http://localhost:5000/api/wages/${userId}`);
+    setMessage("Submission deleted!");
+    fetchWages(); // Refresh table
+    setTimeout(() => setMessage(""), 3000);
+  } catch (err) {
+    console.error(err);
+    setMessage("Error deleting submission");
+  }
+};
+
 
   return (
     <div className="container">
@@ -164,6 +214,8 @@ function App() {
       <select value={lang} onChange={(e) => setLang(e.target.value)}>
         <option value="en">English</option>
         <option value="sw">Swahili</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
       </select>
       <p className="notice">{t.notice}</p>
       {message && <div className="message">{message}</div>}
@@ -223,6 +275,7 @@ function App() {
               <th>Effective Hourly</th>
               <th>Image</th>
               <th>Submitted At</th>
+              <th>Delete?</th>
             </tr>
           </thead>
           <tbody>
@@ -242,6 +295,15 @@ function App() {
                   {w.image ? <a href={w.image} target="_blank" rel="noopener noreferrer"><img src={w.image} alt="attachment" style={{width:"50px",height:"50px"}}/></a> : "No Image"}
                 </td>
                 <td>{new Date(w.createdAt).toLocaleString()}</td>
+                <td>
+  <button 
+    className="delete-btn" 
+    onClick={() => handleDelete(w.userId)}
+  >
+    Delete
+  </button>
+</td>
+
               </tr>
             ))}
           </tbody>

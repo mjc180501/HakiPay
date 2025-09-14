@@ -80,6 +80,19 @@ app.get("/api/wages", (req, res) => {
 
   res.json(result);
 });
+// Delete a wage by userId
+app.delete("/api/wages/:userId", (req, res) => {
+  const { userId } = req.params;
+  const index = wages.findIndex((w) => w.userId === userId);
+
+  if (index === -1) {
+    return res.status(404).json({ error: "Submission not found" });
+  }
+
+  const deleted = wages.splice(index, 1);
+  res.status(200).json({ message: "Submission deleted", deleted });
+});
+
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
