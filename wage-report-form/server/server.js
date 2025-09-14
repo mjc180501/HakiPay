@@ -11,6 +11,10 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; // 32 chars
+
+if (!ENCRYPTION_KEY || ENCRYPTION_KEY.length !== 32) {
+  throw new Error(`ENCRYPTION_KEY must be 32 characters long. Current length: ${ENCRYPTION_KEY.length}`);
+}
 const IV_LENGTH = 16;
 
 // In-memory array to store wages
