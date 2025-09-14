@@ -25,6 +25,9 @@ function ContactPage() {
           <div className="dropdown-content">
             <Link to="/wage-report">Share your wages now</Link>
             <Link to="/contact">Contact Us</Link>
+             <a href="http://localhost:5000" target="_blank" rel="noopener noreferrer">
+                Personal Financial Calculator
+              </a>
           </div>
         </div>
         <Link to="/defining-the-problem">Defining the Problem</Link>
